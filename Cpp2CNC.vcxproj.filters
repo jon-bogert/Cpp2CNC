@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{a1c61700-28b7-47ec-bf3b-69850ae80195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripting">
+      <UniqueIdentifier>{3ef1682e-1e51-4477-9cf8-b269263bf9ba}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Compiler.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pch.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LatheCore.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\LatheCore.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Compiler.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pch.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
