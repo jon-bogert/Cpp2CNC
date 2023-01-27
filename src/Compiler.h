@@ -2,10 +2,11 @@
 
 class Compiler
 {
-	Compiler();
+	Compiler() {};
 	static Compiler& Get();
 
 	std::ofstream file;
+	bool debugPrint = true; // if true, Prints will also print to Console
 
 public:
 	~Compiler();

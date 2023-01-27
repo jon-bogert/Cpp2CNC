@@ -21,7 +21,7 @@ void Compiler::Init(std::string fileName, std::string path)
 	if (path[path.length() - 1] != '\\' && path[path.length() - 1] != '/')
 		path.push_back('\\');
 
-	std::string fullPath = path + fileName;
+	std::string fullPath = path + fileName + ".txt";
 
 	file.open(fullPath);
 	if (!file.is_open())
@@ -31,11 +31,17 @@ void Compiler::Init(std::string fileName, std::string path)
 	}
 
 	file << fileName << " ";
+
+	if (Get().debugPrint)
+		std::cout << fileName << " ";
 }
 
 void Compiler::Print(std::string line)
 {
 	Get().file << line;
+
+	if (Get().debugPrint)
+		std::cout << line;
 }
 
 void Compiler::Assert(std::string msg)

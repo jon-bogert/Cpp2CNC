@@ -4,7 +4,7 @@
 namespace lathe
 {
 	void N(unsigned _num);
-	void T(unsigned _tool, int offset = -1);
+	void T(unsigned _tool, int offset = -1); // default will offset will be same as tool number if not provided (-1)
 
 	//Lathe M-Codes;
 	//Documentation: https://www.haascnc.com/service/service-content/guide-procedures/lathe---m-codes.html
@@ -24,7 +24,7 @@ namespace lathe
 	void M15();
 	void M17();
 	void M18();
-	void M19();
+	void M19(Num r);
 	void M21();
 	void M22();
 	void M23();
