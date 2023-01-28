@@ -36,11 +36,9 @@ Script::Script()
 void Script::Main(int argc, char* argv[])
 {
 	Comment("<Enter Program Description Here>");
-	OrientSpindle(340);
-	Num n = 18.;
-	LocalSubprogram(n);
-	If(501, 18, LE);
-	GoTo(10);
+	RapidAbsolute(10, -5);
+	LinearFeedRelative(.02, NONE);
+	LinearFeedRelative(NONE, -0.0005);
 
 	BR;
 

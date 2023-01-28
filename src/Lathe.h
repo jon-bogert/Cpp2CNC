@@ -2,9 +2,6 @@
 
 namespace lathe
 {
-
-	
-
 	void NumBlock(unsigned _num);										// N#
 	void Tool(unsigned _tool, int offset = -1, bool newLine = true);	// T####
 																		// Offset will default to same as tool number if not provided
@@ -125,5 +122,65 @@ namespace lathe
 	void PCoolAdd(int amt);												// +'ve -> M334 | -'ve  -> M335
 	void SetToolAirBlash(bool isOn);									// true -> M373 | false -> M374
 	void ThroughSpindleCoolant(bool isOn);								// true -> M388 | false -> M389
+
+
+
+
+	//Lathe G-Codes;
+	//Documentation: https://www.haascnc.com/service/service-content/guide-procedures/lathe---g-codes.html
+
+	void Rapid(Num u, Num w, Num x, Num z, Num e = NONE, Num y = NONE, Num b = NONE, Num c = NONE);			// G00 - All Parameters
+	void RapidAbsolute(Num x, Num z, Num rapidPercent = NONE);												// G00 - X, Z and E (opt.) only
+	void RapidRelative(Num u, Num w, Num rapidPercent = NONE);												// G00 - U, W and E (opt.) only
+
+	void LinearFeed(Num u, Num w, Num x, Num z, Num f = NONE, Num a = NONE, Num y = NONE, Num i = NONE,     // G01 - All Parameters
+		Num k = NONE, Num b = NONE, Num c = NONE, Num commaC = NONE, Num r = NONE, Num commaR = NONE);
+	void LinearFeedAbsolute(Num x, Num z, Num feedRate = NONE);												// G01 - X, Z and F (opt.) only
+	void LinearFeedRelative(Num u, Num w, Num feedRate = NONE);												// G01 - U, W and F (opt.) only
+	// TODO - Add functions for champfering
+
+	void CWCircularFeed(Num u, Num w, Num x, Num z, Num f = NONE, Num r = NONE, Num y = NONE,				// G02 - All Parameters
+		Num i = NONE, Num j = NONE, Num k = NONE);
+	void CWCircularFeedAbsolute(Num x, Num z, Num radius, Num feedRate = NONE);								// G02 - X, Z, R, and F (opt.) only
+	void CWCircularFeedRelative(Num u, Num w, Num radius, Num feedRate = NONE);								// G02 - U, W, R, and F (opt.) only
+
+	void CCWCircularFeed(Num u, Num w, Num x, Num z, Num f = NONE, Num r = NONE, Num y = NONE,				// G03 - All Parameters
+		Num i = NONE, Num j = NONE, Num k = NONE);
+	void CCWCircularFeedAbsolute(Num x, Num z, Num radius, Num feedRate = NONE);							// G03 - X, Z, R, and F (opt.) only
+	void CCWCircularFeedRelative(Num u, Num w, Num radius, Num feedRate = NONE);							// G03 - U, W, R, and F (opt.) only
+	
+	void Dwell(Num milliSeconds);																			// G04 without decimal;
+	void DwellSeconds(Num seconds);																			// G04 with decimal;
+
+	void ExactStop();																						// G09
+
+	void SetOffset(unsigned l, unsigned p, Num u, Num w, Num x, Num z, Num q = NONE, Num r = NONE);			// G10 - All Parameters
+	void SetOffsetAbsolute(unsigned category, unsigned offset, Num x, Num z);								// G10 - L, P, X and Z only
+	void SetOffsetRelative(unsigned category, unsigned offset, Num u, Num w);								// G10 - L, P, U and W only
+
+	void SecondarySpindleSwap(bool isActive);																// true -> G14 | false -> G15
+
+	void XYPlane();																							// G17
+	void XZPlane();																							// G18
+	void YZPlane();																							// G19
+
+	void SetImperial();																						// G20
+	void SetMetric();																						// G21
+
+	void ReturnToZero(Num u = NONE, Num w = NONE, Num x = NONE, Num z = NONE);								// G28
+	void ReturnToReference();																				// G29
+	
+	void FeedUnitlSkip();																					// G31
+
+	void CutThread(Num u, Num w, Num x, Num z, Num f, Num q = NONE);										// G32 - All Parameters
+	void CutThreadAbsolute(Num x, Num z, Num feedRate);														// G32 - All Parameters
+	void CutThreadRelative(Num u, Num w, Num feedRate);														// G32 - All Parameters
+
+	void TNCCancel();																						// G40;
+	void TNCLeft();																							// G41;
+	void TNCRight();																						// G42;
+	void ToolLengthComp();																					// G43;
+
+
 
 }

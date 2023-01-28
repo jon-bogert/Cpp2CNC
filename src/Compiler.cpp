@@ -54,3 +54,13 @@ void Compiler::Assert(std::string msg)
 	}
 	assert(NULL);
 }
+
+bool Compiler::CompLastGCmd(unsigned cmd)
+{
+	return cmd == Get().lastGCmd;
+}
+
+void Compiler::SetLastGCmd(const unsigned cmd)
+{
+	Get().lastGCmd = cmd;
+}

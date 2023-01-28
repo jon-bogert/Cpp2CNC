@@ -685,3 +685,279 @@ void lathe::M389()
 {
 	Compiler::Print("M389\n");
 }
+
+void lathe::G00(Num u, Num w, Num x, Num z, Num y, Num b, Num c, Num e)
+{
+	std::string line;
+	if (!Compiler::CompLastGCmd(0))
+	{
+		line += "G00 ";
+		Compiler::SetLastGCmd(0);
+	}
+	if (u.isValid)
+		line += "U" + u.FormatDec() + " ";
+	if (w.isValid)
+		line += "W" + w.FormatDec() + " ";
+	if (x.isValid)
+		line += "X" + x.FormatDec() + " ";
+	if (y.isValid)
+		line += "Y" + y.FormatDec() + " ";
+	if (z.isValid)
+		line += "Z" + z.FormatDec() + " ";
+	if (e.isValid)
+		line += "E" + e.FormatDec() + " ";
+	if (b.isValid)
+		line += "B" + b.FormatDec() + " ";
+	if (c.isValid)
+		line += "C" + c.FormatDec() + " ";
+
+	if (!line.empty()) line.pop_back();
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G01(Num u, Num w, Num x, Num z, Num f, Num a, Num y, Num i, Num k, Num b, Num c, Num commaC, Num r, Num commaR)
+{
+	std::string line;
+	if (!Compiler::CompLastGCmd(1))
+	{
+		//if (!f.isValid)
+		//	Compiler::Assert("G01 Must specify feed rate on new G01 declaration");
+		line += "G01 ";
+		Compiler::SetLastGCmd(1);
+	}
+	if (u.isValid)
+		line += "U" + u.FormatDec() + " ";
+	if (w.isValid)
+		line += "W" + w.FormatDec() + " ";
+	if (x.isValid)
+		line += "X" + x.FormatDec() + " ";
+	if (y.isValid)
+		line += "Y" + y.FormatDec() + " ";
+	if (z.isValid)
+		line += "Z" + z.FormatDec() + " ";
+	if (f.isValid)
+		line += "F" + f.FormatDec() + " ";
+	if (a.isValid)
+		line += "A" + a.FormatDec() + " ";
+	if (b.isValid)
+		line += "B" + b.FormatDec() + " ";
+	if (c.isValid)
+		line += "C" + c.FormatDec() + " ";
+	if (i.isValid)
+		line += "I" + i.FormatDec() + " ";
+	if (k.isValid)
+		line += "K" + k.FormatDec() + " ";
+	if (commaC.isValid)
+		line += ",C" + commaC.FormatDec() + " ";
+	if (r.isValid)
+		line += "R" + r.FormatDec() + " ";
+	if (commaR.isValid)
+		line += ",R" + commaR.FormatDec() + " ";
+
+	if (!line.empty()) line.pop_back();
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G02(Num u, Num w, Num x, Num z, Num f, Num r, Num y, Num i, Num j, Num k)
+{
+	std::string line;
+	if (!Compiler::CompLastGCmd(2))
+	{
+		line += "G02 ";
+		Compiler::SetLastGCmd(2);
+	}
+	if (u.isValid)
+		line += "U" + u.FormatDec() + " ";
+	if (w.isValid)
+		line += "W" + w.FormatDec() + " ";
+	if (x.isValid)
+		line += "X" + x.FormatDec() + " ";
+	if (y.isValid)
+		line += "Y" + y.FormatDec() + " ";
+	if (z.isValid)
+		line += "Z" + z.FormatDec() + " ";
+	if (f.isValid)
+		line += "F" + f.FormatDec() + " ";
+	if (i.isValid)
+		line += "I" + i.FormatDec() + " ";
+	if (j.isValid)
+		line += "J" + j.FormatDec() + " ";
+	if (k.isValid)
+		line += "K" + k.FormatDec() + " ";
+
+	if (!line.empty()) line.pop_back();
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G03(Num u, Num w, Num x, Num z, Num f, Num r, Num y, Num i, Num j, Num k)
+{
+	std::string line;
+	if (!Compiler::CompLastGCmd(3))
+	{
+		line += "G03 ";
+		Compiler::SetLastGCmd(3);
+	}
+	if (u.isValid)
+		line += "U" + u.FormatDec() + " ";
+	if (w.isValid)
+		line += "W" + w.FormatDec() + " ";
+	if (x.isValid)
+		line += "X" + x.FormatDec() + " ";
+	if (y.isValid)
+		line += "Y" + y.FormatDec() + " ";
+	if (z.isValid)
+		line += "Z" + z.FormatDec() + " ";
+	if (f.isValid)
+		line += "F" + f.FormatDec() + " ";
+	if (i.isValid)
+		line += "I" + i.FormatDec() + " ";
+	if (j.isValid)
+		line += "J" + j.FormatDec() + " ";
+	if (k.isValid)
+		line += "K" + k.FormatDec() + " ";
+
+	if (!line.empty()) line.pop_back();
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G04(Num time, bool asSeconds)
+{
+	std::string line = "G04 P";
+	if (asSeconds)
+		line += time.FormatDec();
+	else
+		line += time.FormatInt();
+
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G09()
+{
+	Compiler::Print("G09\n");
+}
+
+void lathe::G10(unsigned l, unsigned p, Num u, Num w, Num x, Num z, Num q, Num r)
+{
+	std::string line = "G10 L" + std::to_string(l) + " P" + std::to_string(p) + " ";
+	if (u.isValid)
+		line += "U" + u.FormatDec() + " ";
+	if (w.isValid)
+		line += "W" + w.FormatDec() + " ";
+	if (x.isValid)
+		line += "X" + x.FormatDec() + " ";
+	if (z.isValid)
+		line += "Z" + z.FormatDec() + " ";
+	if (q.isValid)
+		line += "Q" + q.FormatDec() + " ";
+	if (r.isValid)
+		line += "R" + r.FormatDec() + " ";
+
+	if (!line.empty()) line.pop_back();
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G14()
+{
+	Compiler::Print("G14\n");
+}
+
+void lathe::G15()
+{
+	Compiler::Print("G15\n");
+}
+
+void lathe::G17()
+{
+	Compiler::Print("G17\n");
+}
+
+void lathe::G18()
+{
+	Compiler::Print("G18\n");
+}
+
+void lathe::G19()
+{
+	Compiler::Print("G19\n");
+}
+
+void lathe::G20()
+{
+	Compiler::Print("G20\n");
+}
+
+void lathe::G21()
+{
+	Compiler::Print("G21\n");
+}
+
+void lathe::G28(Num u, Num w, Num x, Num z)
+{
+	std::string line = "G28 ";
+	if (x.isValid)
+		line += "X" + x.FormatDec() + " ";
+	if (z.isValid)
+		line += "Z" + z.FormatDec() + " ";
+	if (u.isValid)
+		line += "U" + u.FormatDec() + " ";
+	if (w.isValid)
+		line += "W" + w.FormatDec() + " ";
+
+	if (!line.empty()) line.pop_back();
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G29()
+{
+	Compiler::Print("G29\n");
+}
+
+void lathe::G31()
+{
+	Compiler::Print("G31 ");
+}
+
+void lathe::G32(Num u, Num w, Num x, Num z, Num f, Num q)
+{
+	std::string line;
+	if (!Compiler::CompLastGCmd(32))
+	{
+		line = "G32 ";
+		Compiler::SetLastGCmd(32);
+	}
+	if (x.isValid)
+		line += "X" + x.FormatDec() + " ";
+	if (z.isValid)
+		line += "Z" + z.FormatDec() + " ";
+	if (u.isValid)
+		line += "U" + u.FormatDec() + " ";
+	if (w.isValid)
+		line += "W" + w.FormatDec() + " ";
+	if (f.isValid)
+		line += "F" + f.FormatDec() + " ";
+	if (q.isValid)
+		line += "Q" + q.FormatDec() + " ";
+
+	if (!line.empty()) line.pop_back();
+	Compiler::Print(line + "\n");
+}
+
+void lathe::G40()
+{
+	Compiler::Print("G40\n");
+}
+
+void lathe::G41()
+{
+	Compiler::Print("G41\n");
+}
+
+void lathe::G42()
+{
+	Compiler::Print("G42\n");
+}
+
+void lathe::G43()
+{
+	Compiler::Print("G43\n");
+}

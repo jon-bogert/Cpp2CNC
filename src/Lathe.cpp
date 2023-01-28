@@ -487,3 +487,176 @@ void lathe::ThroughSpindleCoolant(bool isOn)
 	else
 		M389();
 }
+
+void lathe::Rapid(Num u, Num w, Num x, Num z, Num e, Num y, Num b, Num c)
+{
+	G00(u, w, x, z, e, y, b, c);
+}
+
+void lathe::RapidAbsolute(Num x, Num z, Num rapidPercent)
+{
+	G00(NONE, NONE, x, z, rapidPercent);
+}
+
+void lathe::RapidRelative(Num x, Num z, Num rapidPercent)
+{
+	G00(x, z, NONE, NONE, rapidPercent);
+}
+
+void lathe::LinearFeed(Num u, Num w, Num x, Num z, Num f, Num a, Num y, Num i, Num k, Num b, Num c, Num commaC, Num r, Num commaR)
+{
+	G01(u, w, x, z, f, a, y, i, k, b, c, commaC, r, commaR);
+}
+
+void lathe::LinearFeedAbsolute(Num x, Num z, Num feedRate)
+{
+	G01(NONE, NONE, x, z, feedRate);
+}
+
+void lathe::LinearFeedRelative(Num x, Num z, Num feedRate)
+{
+	G01(x, z, NONE, NONE, feedRate);
+}
+
+void lathe::CWCircularFeed(Num u, Num w, Num x, Num z, Num f, Num r, Num y, Num i, Num j, Num k)
+{
+	G02(u, w, x, z, f, r, y, i, j, k);
+}
+
+void lathe::CWCircularFeedAbsolute(Num x, Num z, Num radius, Num feedRate)
+{
+	G02(NONE, NONE, x, z, feedRate, radius);
+}
+
+void lathe::CWCircularFeedRelative(Num x, Num z, Num radius, Num feedRate)
+{
+	G02(x, z, NONE, NONE, feedRate, radius);
+}
+
+void lathe::CCWCircularFeed(Num u, Num w, Num x, Num z, Num f, Num r, Num y, Num i, Num j, Num k)
+{
+	G03(u, w, x, z, f, r, y, i, j, k);
+}
+
+void lathe::CCWCircularFeedAbsolute(Num x, Num z, Num radius, Num feedRate)
+{
+	G03(NONE, NONE, x, z, feedRate, radius);
+}
+
+void lathe::CCWCircularFeedRelative(Num x, Num z, Num radius, Num feedRate)
+{
+	G03(x, z, NONE, NONE, feedRate, radius);
+}
+
+void lathe::Dwell(Num milliSeconds)
+{
+	G04(milliSeconds);
+}
+
+void lathe::DwellSeconds(Num seconds)
+{
+	G04(seconds, true);
+}
+
+void lathe::ExactStop()
+{
+	G09();
+}
+
+void lathe::SetOffset(unsigned l, unsigned p, Num u, Num w, Num x, Num z, Num q, Num r)
+{
+	G10(l, p, u, w, x, z, q, r);
+}
+
+void lathe::SetOffsetAbsolute(unsigned category, unsigned offset, Num x, Num z)
+{
+	G10(category, offset, NONE, NONE, x, z);
+}
+
+void lathe::SetOffsetRelative(unsigned category, unsigned offset, Num u, Num w)
+{
+	G10(category, offset, u, w, NONE, NONE);
+}
+
+void lathe::SecondarySpindleSwap(bool isActive)
+{
+	if (isActive)
+		G14();
+	else
+		G15();
+}
+
+void lathe::XYPlane()
+{
+	G17();
+}
+
+void lathe::XZPlane()
+{
+	G18();
+}
+
+void lathe::YZPlane()
+{
+	G19();
+}
+
+void lathe::SetImperial()
+{
+	G20();
+}
+
+void lathe::SetMetric()
+{
+	G21();
+}
+
+void lathe::ReturnToZero(Num u, Num w, Num x, Num z)
+{
+	G28(u, w, x, z);
+}
+
+void lathe::ReturnToReference()
+{
+	G29();
+}
+
+void lathe::FeedUnitlSkip()
+{
+	G31();
+}
+
+void lathe::CutThread(Num u, Num w, Num x, Num z, Num f, Num q)
+{
+	G32(u, w, x, z, f, q);
+}
+
+void lathe::CutThreadAbsolute(Num x, Num z, Num feedRate)
+{
+	G32(NONE, NONE, x, z, feedRate);
+}
+
+void lathe::CutThreadRelative(Num u, Num w, Num feedRate)
+{
+	G32(u, w, NONE, NONE, feedRate);
+}
+
+void lathe::TNCCancel()
+{
+	G40();
+}
+
+void lathe::TNCLeft()
+{
+	G41();
+}
+
+void lathe::TNCRight()
+{
+	G42();
+}
+
+void lathe::ToolLengthComp()
+{
+	G43();
+}

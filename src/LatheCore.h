@@ -122,4 +122,33 @@ namespace lathe
 	void M374();
 	void M388();
 	void M389();
+
+
+
+	//Lathe G-Codes;
+	//Documentation: https://www.haascnc.com/service/service-content/guide-procedures/lathe---g-codes.html
+
+	void G00(Num u, Num w, Num x, Num z, Num e = NONE, Num y = NONE, Num b = NONE, Num c = NONE);
+	void G01(Num u, Num w, Num x, Num z, Num f = NONE, Num a = NONE, Num y = NONE, Num i = NONE,
+		Num k = NONE, Num b = NONE, Num c = NONE, Num commaC = NONE, Num r = NONE, Num commaR = NONE);
+	void G02(Num u, Num w, Num x, Num z, Num f = NONE, Num r = NONE, Num y = NONE, Num i = NONE, Num j = NONE, Num k = NONE);
+	void G03(Num u, Num w, Num x, Num z, Num f = NONE, Num r = NONE, Num y = NONE, Num i = NONE, Num j = NONE, Num k = NONE);
+	void G04(Num time, bool asSeconds = false);
+	void G09();
+	void G10(unsigned l, unsigned p, Num u, Num w, Num x, Num z, Num q = NONE, Num r = NONE);
+	void G14();
+	void G15();
+	void G17();
+	void G18();
+	void G19();
+	void G20();
+	void G21();
+	void G28(Num u = NONE, Num w = NONE, Num x = NONE, Num z = NONE);
+	void G29();
+	void G31();
+	void G32(Num u, Num w, Num x, Num z, Num f, Num q = NONE);
+	void G40();
+	void G41();
+	void G42();
+	void G43();
 }
