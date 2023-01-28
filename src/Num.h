@@ -22,9 +22,11 @@ private:
 	}
 
 public:
+	Num() = default;
 	Num(double val) { value = val; isValid = true; }
 	Num(float val) { value = val; isValid = true; }
 	Num(int val) { value = val; isValid = true; }
+	Num(unsigned val) { value = val; isValid = true; }
 
 	std::string FormatInt()
 	{
@@ -66,6 +68,11 @@ public:
 		value = val;
 		isValid = true;
 	}
+	void operator=(const unsigned& val)
+	{
+		value = val;
+		isValid = true;
+	}
 
 	// +
 	friend Num operator+( const Num& left, const double& right)
@@ -94,6 +101,16 @@ public:
 	}
 
 	friend Num operator+(const int& left, const Num& right)
+	{
+		return Num(left + right.value);
+	}
+
+	friend Num operator+(const Num& left, const unsigned& right)
+	{
+		return Num(left.value + right);
+	}
+
+	friend Num operator+(const unsigned& left, const Num& right)
 	{
 		return Num(left + right.value);
 	}
@@ -129,6 +146,16 @@ public:
 		return Num(left - right.value);
 	}
 
+	friend Num operator-(const Num& left, const unsigned& right)
+	{
+		return Num(left.value - right);
+	}
+
+	friend Num operator-(const unsigned& left, const Num& right)
+	{
+		return Num(left - right.value);
+	}
+
 	// *
 	friend Num operator*(const Num& left, const double& right)
 	{
@@ -156,6 +183,15 @@ public:
 	}
 
 	friend Num operator*(const int& left, const Num& right)
+	{
+		return Num(left * right.value);
+	}
+	friend Num operator*(const Num& left, const unsigned& right)
+	{
+		return Num(left.value * right);
+	}
+
+	friend Num operator*(const unsigned& left, const Num& right)
 	{
 		return Num(left * right.value);
 	}
@@ -191,6 +227,16 @@ public:
 		return Num(left / right.value);
 	}
 
+	friend Num operator/(const Num& left, const unsigned& right)
+	{
+		return Num(left.value / right);
+	}
+
+	friend Num operator/(const unsigned& left, const Num& right)
+	{
+		return Num(left / right.value);
+	}
+
 	// %
 
 	friend Num operator%(const Num& left, const int& right)
@@ -205,6 +251,20 @@ public:
 		if (right.value != static_cast<int>(right.value))
 			std::cout << "WARNING: Num value " << right.value << " truncated for % operation\n";
 		return Num(left % static_cast<int>(right.value));
+	}
+
+	friend Num operator%(const Num& left, const unsigned& right)
+	{
+		if (left.value != static_cast<unsigned>(left.value))
+			std::cout << "WARNING: Num value " << left.value << " truncated for % operation\n";
+		return Num(static_cast<unsigned>(left.value) % right);
+	}
+
+	friend Num operator%(const unsigned& left, const Num& right)
+	{
+		if (right.value != static_cast<unsigned>(right.value))
+			std::cout << "WARNING: Num value " << right.value << " truncated for % operation\n";
+		return Num(left % static_cast<unsigned>(right.value));
 	}
 
 	// <
@@ -236,6 +296,16 @@ public:
 	friend bool operator<(const int& left, const Num& right)
 	{
 		return (left < right.value);
+	}
+
+	friend bool operator<(const unsigned& left, const Num& right)
+	{
+		return (left < right.value);
+	}
+
+	friend bool operator<(const Num& left, const unsigned& right)
+	{
+		return (left.value < right);
 	}
 
 	friend bool operator<(const Num& left, const Num& right)
@@ -270,6 +340,16 @@ public:
 	}
 
 	friend bool operator<=(const int& left, const Num& right)
+	{
+		return (left <= right.value);
+	}
+
+	friend bool operator<=(const Num& left, const unsigned& right)
+	{
+		return (left.value <= right);
+	}
+
+	friend bool operator<=(const unsigned& left, const Num& right)
 	{
 		return (left <= right.value);
 	}
@@ -310,6 +390,16 @@ public:
 		return (left > right.value);
 	}
 
+	friend bool operator>(const Num& left, const unsigned& right)
+	{
+		return (left.value > right);
+	}
+
+	friend bool operator>(const unsigned& left, const Num& right)
+	{
+		return (left > right.value);
+	}
+
 	friend bool operator>(const Num& left, const Num& right)
 	{
 		return (left.value > right.value);
@@ -342,6 +432,16 @@ public:
 	}
 
 	friend bool operator>=(const int& left, const Num& right)
+	{
+		return (left >= right.value);
+	}
+
+	friend bool operator>=(const Num& left, const unsigned& right)
+	{
+		return (left.value > right);
+	}
+
+	friend bool operator>=(const unsigned& left, const Num& right)
 	{
 		return (left >= right.value);
 	}
@@ -382,26 +482,43 @@ public:
 		return (left == right.value);
 	}
 
+	friend bool operator==(const Num& left, const unsigned& right)
+	{
+		return (left.value == right);
+	}
+
+	friend bool operator==(const unsigned& left, const Num& right)
+	{
+		return (left == right.value);
+	}
+
 	friend bool operator==(const Num& left, const Num& right)
 	{
 		return (left.value == right.value);
 	}
 
-	explicit operator double() const
+	operator double() const
 	{
 		return value;
 	}
 
-	explicit operator float() const
+	operator float() const
 	{
 		std::cout << "WARNING: Conversion from Num to float. Possible loss of precision\n";
 		return static_cast<float>(value);
 	}
 
-	explicit operator int() const
+	operator int() const
 	{
 		if (value != static_cast<int>(value))
 			std::cout << "WARNING: Loss of data wheen converting Num to int\n";
 		return static_cast<int>(value);
+	}
+
+	operator unsigned() const
+	{
+		if (value != static_cast<unsigned>(value))
+			std::cout << "WARNING: Loss of data wheen converting Num to unsigned int\n";
+		return static_cast<unsigned>(value);
 	}
 };

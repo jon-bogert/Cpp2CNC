@@ -37,5 +37,13 @@ void Script::Main(int argc, char* argv[])
 {
 	Comment("<Enter Program Description Here>");
 	OrientSpindle(340);
+	Num n = 18.;
+	LocalSubprogram(n);
+	If(501, 18, LE);
+	GoTo(10);
+
+	BR;
+
+	SSVCustomStart(NONE, 1.3);
 	EndAndReset();
 }

@@ -1,3 +1,7 @@
 O12345 ( <Enter Program Description Here> )
 M19 P340
+M97 P18
+IF [ #501 LE 18. ] GOTO10
+
+M138 E1.3
 M30

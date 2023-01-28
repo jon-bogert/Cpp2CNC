@@ -8,9 +8,39 @@ void lathe::NumBlock(unsigned _num)
 	N(_num);
 }
 
-void lathe::Tool(unsigned _tool, int offset)
+void lathe::Tool(unsigned _tool, int offset, bool newLine)
 {
-	T(_tool, offset);
+	T(_tool, offset, newLine);
+}
+
+void lathe::If(unsigned varNum, Num compVal, CMP cmp)
+{
+	IF(varNum, compVal, cmp);
+}
+
+void lathe::GoTo(unsigned numBlock)
+{
+	GOTO(numBlock);
+}
+
+void lathe::While(unsigned varNum, Num compVal, unsigned index, CMP cmp)
+{
+	WHILE(varNum, compVal, index, cmp);
+}
+
+void lathe::EndWhile(unsigned index)
+{
+	END(index);
+}
+
+void lathe::Var(unsigned _num, Num value)
+{
+	HASH(_num, value);
+}
+
+void lathe::BlockDelete()
+{
+	Compiler::Print("/");
 }
 
 void lathe::Stop()
@@ -43,10 +73,10 @@ void lathe::SpindleStop()
 	M05();
 }
 
-void lathe::SetCoolant(bool isOn)
+void lathe::SetCoolant(bool isOn, Num pressure)
 {
 	if (isOn)
-		M08();
+		M08(pressure);
 	else
 		M09();
 }
@@ -59,12 +89,14 @@ void lathe::SetChuckClamp(bool isOn)
 		M11();
 }
 
-void lathe::SetAutoAirJetBlast(bool isOn)
+void lathe::AutoAirJetBlastOn(unsigned rpm, unsigned msTime)
 {
-	if (isOn)
-		M12();
-	else
-		M13();
+	M12(rpm, msTime);
+}
+
+void lathe::AutoAirJetBlastOff()
+{
+	M13();
 }
 
 void lathe::SetSpindleBrake(bool isOn)
@@ -183,16 +215,16 @@ void lathe::SetMCodeRelay(unsigned _num, bool isOn)
 		(isOn) ? M56() : M66();
 		break;
 	default:
-		Compiler::Assert("MCodeReay index out of range");
+		Compiler::Assert("MCodeRelay index out of range");
 	}
 }
 
-void lathe::SetOutputRelay(bool isOn)
+void lathe::SetOutputRelay(bool isOn, unsigned relayBank)
 {
 	if (isOn)
-		M59();
+		M59(relayBank);
 	else
-		M69();
+		M69(relayBank);
 }
 
 void lathe::AlarmIfSkipSignal()
@@ -219,4 +251,239 @@ void lathe::SetHighPressureCoolant(bool isOn)
 		M88();
 	else
 		M89();
+}
+
+void lathe::SetFixtureClampInput(bool isOn)
+{
+	if (isOn)
+		M90();
+	else
+		M91();
+}
+
+void lathe::SleepMode()
+{
+	M95();
+}
+
+void lathe::JumpIfNoSignal(unsigned lineNum, unsigned varNum)
+{
+	M96(lineNum, varNum);
+}
+
+void lathe::LocalSubprogram(unsigned lineNum, unsigned times)
+{
+	M97(lineNum, times);
+}
+
+void lathe::Subprogram(unsigned progNum, unsigned times)
+{
+	M98(progNum, times);
+}
+
+void lathe::Subprogram(std::string progPath, unsigned times)
+{
+	M98(progPath, times);
+}
+
+void lathe::EndSubprogram()
+{
+	M99();
+}
+
+void lathe::SetProbeArm(bool isExtended)
+{
+	if (isExtended)
+		M104();
+	else
+		M105();
+}
+
+void lathe::UserInput(unsigned varNum)
+{
+	M109(varNum);
+}
+
+void lathe::SetSecondaryChuckClamp(bool isClamped)
+{
+	if (isClamped)
+		M110();
+	else
+		M111();
+}
+
+void lathe::SecondarySpindleAirBlastOn(unsigned rpm, unsigned msTime)
+{
+	M112(rpm, msTime);
+}
+
+void lathe::SecondarySpindleAirBlastOff()
+{
+	M113();
+}
+
+void lathe::SetSecondarySpindleBrake(bool isOn)
+{
+	if (isOn)
+		M114();
+	else
+		M115();
+}
+
+void lathe::OrientSecondarySpindle(Num r)
+{
+	M119(r);
+}
+
+void lathe::SetMCodeRelayMFin(unsigned _num)
+{
+	switch (_num)
+	{
+	case 1:
+		M121();
+		break;
+	case 2:
+		M122();
+		break;
+	case 3:
+		M123();
+		break;
+	case 4:
+		M124();
+		break;
+	case 5:
+		M125();
+		break;
+	case 6:
+		M126();
+		break;
+	default:
+		Compiler::Assert("MCodeRelay with M-Fin index out of range");
+	}
+}
+
+void lathe::MCodeRelayMFinOn(unsigned relayBank)
+{
+	M129(relayBank);
+}
+
+void lathe::SetShowDisplayMedia(bool isOn, std::string file)
+{
+	if (isOn)
+		M130(file);
+	else
+		M131();
+}
+
+void lathe::LiveToolFrwd(unsigned rpm)
+{
+	M133(rpm);
+}
+
+void lathe::LiveToolRev(unsigned rpm)
+{
+	M134(rpm);
+}
+
+void lathe::LiveToolStop()
+{
+	M135();
+}
+
+void lathe::SSVCustomStart(Num amt, Num rate)
+{
+	M138(amt, rate);
+}
+
+void lathe::SSVCustomStop()
+{
+	M139();
+}
+
+void lathe::SecondarySpindleFrwd(unsigned rpm)
+{
+	M143(rpm);
+}
+
+void lathe::SecondarySpindleRev(unsigned rpm)
+{
+	M144(rpm);
+}
+
+void lathe::SecondarySpindleStop()
+{
+	M145();
+}
+
+void lathe::SetSteadyRest(bool isClamped)
+{
+	if (isClamped)
+		M146();
+	else
+		M147();
+}
+
+void lathe::SetMistCondenser(bool isOn)
+{
+	if (isOn)
+		M158();
+	else
+		M159();
+}
+
+void lathe::Set4thAxisBrake(bool isOn)
+{
+	if (isOn)
+		M170();
+	else
+		M171();
+}
+
+void lathe::SetLiveToolBrake(bool isOn)
+{
+	if (isOn)
+		M214();
+	else
+		M215();
+}
+
+void lathe::OrientLiveTool(Num r)
+{
+	M219(r);
+}
+
+void lathe::EndAndResetAPL()
+{
+	M299();
+}
+
+void lathe::CustomSequenceAPL(unsigned progNum, bool reverse)
+{
+	M300(progNum, reverse);
+}
+
+void lathe::PCoolAdd(int amt)
+{
+	if (amt > 0)
+		M334(amt);
+	else if (amt < 0)
+		M335(-amt);
+	else
+		Compiler::Assert("P-Cool Increment/Decrement called amount 0");
+}
+
+void lathe::SetToolAirBlash(bool isOn)
+{
+	if (isOn)
+		M373();
+	else
+		M374();
+}
+
+void lathe::ThroughSpindleCoolant(bool isOn)
+{
+	if (isOn)
+		M388();
+	else
+		M389();
 }

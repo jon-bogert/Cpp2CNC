@@ -1,1 +1,2 @@
 C:\repos\Cpp2CNC\x64\Debug\Cpp2CNC.exe
+D:\repos\C++\Cpp2CNC\x64\Debug\Cpp2CNC.exe

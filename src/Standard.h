@@ -2,7 +2,17 @@
 #include "Num.h"
 
 #define BR WriteLine("")
-#define LAST Num();
+#define NONE Num()
+
+enum CMP
+{
+	EQ = 0,
+	NE,
+	GT,
+	GE,
+	LT,
+	LE
+};
 
 void Write(std::string line);		// Writes Line as Shown (no EOB)
 void WriteLine(std::string line);	// Writes Line as Shown (with EOB)

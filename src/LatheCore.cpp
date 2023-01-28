@@ -9,7 +9,7 @@ void lathe::N(unsigned _num)
 	Compiler::Print(lineStream.str());
 }
 
-void lathe::T(unsigned _tool, int offset)
+void lathe::T(unsigned _tool, int offset, bool newLine)
 {
 	if (_tool < 12 || offset > 12 || offset < -1)
 	{
@@ -21,8 +21,83 @@ void lathe::T(unsigned _tool, int offset)
 
 	std::stringstream line;
 	std::string offStr = (offset < 0) ? "0" + offset : std::to_string(offset) ;
-	line << "T" << _tool << offset << std::endl;
+	line << "T" << _tool << offset;
+	if (newLine) line << std::endl;
 	Compiler::Print(line.str());
+}
+
+void lathe::IF(unsigned varNum, Num compVal, CMP cmp)
+{
+	std::string cmpStr;
+	switch (cmp)
+	{
+	case EQ:
+		cmpStr = "EQ";
+		break;
+	case NE:
+		cmpStr = "NE";
+		break;
+	case GT:
+		cmpStr = "GT";
+		break;
+	case GE:
+		cmpStr = "GE";
+		break;
+	case LT:
+		cmpStr = "LT";
+		break;
+	case LE:
+		cmpStr = "LE";
+		break;
+	}
+	Compiler::Print("IF [ #" + std::to_string(varNum) + ' ' + cmpStr + ' ' + compVal.FormatDec() + " ] ");
+}
+
+void lathe::GOTO(unsigned numBlock)
+{
+	Compiler::Print("GOTO" + std::to_string(numBlock) + "\n");
+}
+
+void lathe::WHILE(unsigned varNum, Num compVal, unsigned index, CMP cmp)
+{
+	std::string cmpStr;
+	switch (cmp)
+	{
+	case EQ:
+		cmpStr = "EQ";
+		break;
+	case NE:
+		cmpStr = "NE";
+		break;
+	case GT:
+		cmpStr = "GT";
+		break;
+	case GE:
+		cmpStr = "GE";
+		break;
+	case LT:
+		cmpStr = "LT";
+		break;
+	case LE:
+		cmpStr = "LE";
+		break;
+	}
+	Compiler::Print("WHILE [ #" + std::to_string(varNum) + ' ' + cmpStr + ' ' + compVal.FormatDec() + " ] DO" + std::to_string(index) + "\n");
+}
+
+void lathe::END(unsigned index)
+{
+	Compiler::Print("END" + std::to_string(index) + "\n");
+}
+
+void lathe::HASH(unsigned _num, Num value)
+{
+	Compiler::Print("#" + std::to_string(_num) + std::string(" = ") + value.FormatDec() + "\n");
+}
+
+void lathe::VAR(unsigned _num, Num value)
+{
+	HASH(_num, value);
 }
 
 void lathe::M00()
@@ -55,9 +130,13 @@ void lathe::M05()
 	Compiler::Print("M05\n");
 }
 
-void lathe::M08()
+void lathe::M08(Num pressure)
 {
-	Compiler::Print("M08\n");
+	std::string line = "M08";
+	if (pressure.isValid)
+		line += " P" + pressure.FormatInt();
+
+	Compiler::Print(line + "\n");
 }
 
 void lathe::M09()
@@ -75,9 +154,10 @@ void lathe::M11()
 	Compiler::Print("M11\n");
 }
 
-void lathe::M12()
+void lathe::M12(unsigned rpm, unsigned msTime)
 {
-	Compiler::Print("M12\n");
+	std::string line = "S" + std::to_string(rpm) + std::string(" P") + std::to_string(msTime);
+	Compiler::Print("M12 " + line + "\n");
 }
 
 void lathe::M13()
@@ -224,9 +304,10 @@ void lathe::M56()
 	Compiler::Print("M56\n");
 }
 
-void lathe::M59()
+void lathe::M59(unsigned relayBank)
 {
-	Compiler::Print("M59\n");
+	std::string line = "P" + std::to_string(relayBank);
+	Compiler::Print("M59 " + line + "\n");
 }
 
 void lathe::M61()
@@ -259,9 +340,10 @@ void lathe::M66()
 	Compiler::Print("M66\n");
 }
 
-void lathe::M69()
+void lathe::M69(unsigned relayBank)
 {
-	Compiler::Print("M69\n");
+	std::string line = "P" + std::to_string(relayBank);
+	Compiler::Print("M69 " + line + "\n");
 }
 
 void lathe::M78()
@@ -309,19 +391,39 @@ void lathe::M95()
 	Compiler::Print("M95\n");
 }
 
-void lathe::M96()
+void lathe::M96(unsigned lineNum, unsigned varNum)
 {
-	Compiler::Print("M96\n");
+	if (varNum >= 64)
+		Compiler::Assert("M96 variable number must be between 0-63");
+
+	std::string line = "P" + std::to_string(lineNum) + std::string(" Q") + std::to_string(varNum);
+	Compiler::Print("M96 " + line + "\n");
 }
 
-void lathe::M97()
+void lathe::M97(unsigned lineNum, unsigned times)
 {
-	Compiler::Print("M97\n");
+	std::string line = "P" + std::to_string(lineNum);
+	if (times > 1)
+		line += " L" + std::to_string(times);
+
+	Compiler::Print("M97 " + line + "\n");
 }
 
-void lathe::M98()
+void lathe::M98(unsigned progNum, unsigned times)
 {
-	Compiler::Print("M98\n");
+	std::string line = "P" + std::to_string(progNum);
+	if (times > 1)
+		line += " L" + std::to_string(times);
+
+	Compiler::Print("M98 " + line + "\n");
+}
+void lathe::M98(std::string progPath, unsigned times)
+{
+	std::string line = "(" + progPath + ")";
+	if (times > 1)
+		line += " L" + std::to_string(times);
+
+	Compiler::Print("M98 " + line + "\n");
 }
 
 void lathe::M99()
@@ -339,9 +441,13 @@ void lathe::M105()
 	Compiler::Print("M105\n");
 }
 
-void lathe::M109()
+void lathe::M109(unsigned varNum)
 {
-	Compiler::Print("M109\n");
+	if (varNum < 500 || varNum >= 550)
+		Compiler::Assert("M109 variable number must between 500-549");
+
+	std::string line = "P" + std::to_string(varNum);
+	Compiler::Print("M109" + line + "\n");
 }
 
 void lathe::M110()
@@ -354,9 +460,10 @@ void lathe::M111()
 	Compiler::Print("M111\n");
 }
 
-void lathe::M112()
+void lathe::M112(unsigned rpm, unsigned msTime)
 {
-	Compiler::Print("M112\n");
+	std::string line = "S" + std::to_string(rpm) + std::string(" P") + std::to_string(msTime);
+	Compiler::Print("M112 " + line + "\n");
 }
 
 void lathe::M113()
@@ -374,9 +481,13 @@ void lathe::M115()
 	Compiler::Print("M115\n");
 }
 
-void lathe::M119()
+void lathe::M119(Num r)
 {
-	Compiler::Print("M119\n");
+	if (r < 0 || r > 360)
+		Compiler::Assert("M119 Rotation out of Range");
+
+	std::string param1 = (r.IsWhole()) ? "P" + r.FormatInt() : "R" + r.FormatDec2();
+	Compiler::Print("M119 " + param1 + "\n");
 }
 
 void lathe::M121()
@@ -409,14 +520,19 @@ void lathe::M126()
 	Compiler::Print("M126\n");
 }
 
-void lathe::M129()
+void lathe::M129(unsigned relayBank)
 {
-	Compiler::Print("M129\n");
+	std::string line = "P" + std::to_string(relayBank);
+	Compiler::Print("M129 " + line + "\n");
 }
 
-void lathe::M130()
+void lathe::M130(std::string file)
 {
-	Compiler::Print("M130\n");
+	if (file == "")
+		Compiler::Assert("M130 file must be provided");
+	file = "(" + file + ")";
+
+	Compiler::Print("M130" + file + "\n");
 }
 
 void lathe::M131()
@@ -424,14 +540,16 @@ void lathe::M131()
 	Compiler::Print("M131\n");
 }
 
-void lathe::M133()
+void lathe::M133(unsigned rpm)
 {
-	Compiler::Print("M133\n");
+	std::string line = "P" + std::to_string(rpm);
+	Compiler::Print("M133" + line + "\n");
 }
 
-void lathe::M134()
+void lathe::M134(unsigned rpm)
 {
-	Compiler::Print("M134\n");
+	std::string line = "P" + std::to_string(rpm);
+	Compiler::Print("M134" + line + "\n");
 }
 
 void lathe::M135()
@@ -439,9 +557,16 @@ void lathe::M135()
 	Compiler::Print("M135\n");
 }
 
-void lathe::M138()
+void lathe::M138(Num amt, Num rate)
 {
-	Compiler::Print("M138\n");
+	std::string line;
+	if (amt.isValid)
+		line += "P" + amt.FormatInt();
+	if (amt.isValid && rate.isValid)
+		line.push_back(' ');
+	if (rate.isValid)
+		line += "E" + rate.FormatDec();
+	Compiler::Print("M138 " + line +"\n");
 }
 
 void lathe::M139()
@@ -449,14 +574,16 @@ void lathe::M139()
 	Compiler::Print("M139\n");
 }
 
-void lathe::M143()
+void lathe::M143(unsigned rpm)
 {
-	Compiler::Print("M143\n");
+	std::string line = "P" + std::to_string(rpm);
+	Compiler::Print("M143" + line + "\n");
 }
 
-void lathe::M144()
+void lathe::M144(unsigned rpm)
 {
-	Compiler::Print("M144\n");
+	std::string line = "P" + std::to_string(rpm);
+	Compiler::Print("M144" + line + "\n");
 }
 
 void lathe::M145()
@@ -504,9 +631,13 @@ void lathe::M215()
 	Compiler::Print("M215\n");
 }
 
-void lathe::M219()
+void lathe::M219(Num r)
 {
-	Compiler::Print("M219\n");
+	if (r < 0 || r > 360)
+		Compiler::Assert("M119 Rotation out of Range");
+
+	std::string param1 = (r.IsWhole()) ? "P" + r.FormatInt() : "R" + r.FormatDec2();
+	Compiler::Print("M219 " + param1 + "\n");
 }
 
 void lathe::M299()
@@ -514,19 +645,25 @@ void lathe::M299()
 	Compiler::Print("M299\n");
 }
 
-void lathe::M300()
+void lathe::M300(unsigned progNum, bool reverse)
 {
-	Compiler::Print("M300\n");
+	std::string line = "P" + std::to_string(progNum);
+	if (!reverse)
+		line += " Q0";
+	else
+		line += " R0";
+
+	Compiler::Print("M300" + line + "\n");
 }
 
-void lathe::M334()
+void lathe::M334(unsigned amt)
 {
-	Compiler::Print("M334\n");
+	Compiler::Print("M334 P" + std::to_string(amt) + "\n");
 }
 
-void lathe::M335()
+void lathe::M335(unsigned amt)
 {
-	Compiler::Print("M335\n");
+	Compiler::Print("M335 P" + std::to_string(amt) + "\n");
 }
 
 void lathe::M373()
