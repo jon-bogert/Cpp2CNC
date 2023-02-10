@@ -1,6 +1,8 @@
-( This is a program about that does something )
+O11480 ( This is a program about that does something )
 M15
+M08 P10.05
 M99
 
 M104
+M09
 M30

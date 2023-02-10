@@ -35,9 +35,23 @@ void Decompiler::Run(std::string programName)
 	CmdList line;
 
 	Get().PrintHeader(programName);
+	bool firstLine = true;
 	
 	while(std::getline(Get().fileRead, lineStr))
 	{
+		if (firstLine)
+		{
+			while (!lineStr.empty() && lineStr[0] != ' ' && lineStr[0] != '(')
+			{
+				lineStr.erase(lineStr.begin());
+			}
+			if (!lineStr.empty() && lineStr[0] == ' ')
+			{
+				lineStr.erase(lineStr.begin());
+			}
+			firstLine = false;
+		}
+
 		if(lineStr == "")
 		{
 			Get().TAB;
@@ -48,7 +62,18 @@ void Decompiler::Run(std::string programName)
 		if(lineStr.front() == '(')
 			Get().Comment(lineStr);
 		else
-			Get().LineToList(lineStr, line);
+		{
+			try
+			{
+				Get().LineToList(lineStr, line);
+			}
+			catch (std::exception execpt)
+			{
+				std::cout << "Unrecognized format: " << lineStr << " -> Using WriteLine();" << std::endl;
+				Get().TAB;
+				Get().fileWrite << "WriteLine(\"" << lineStr << "\");" << std::endl;
+			}
+		}
 		while(!line.empty())
 		{
 			switch(line.front().first)
@@ -66,6 +91,7 @@ void Decompiler::Run(std::string programName)
 		}
 	}
 	Get().PrintFooter();
+	std::cout << "Decompile Success!\nFile located at: \"/scripting/Script.cpp\"" << std::endl;
 }
 
 void Decompiler::SetUsingLathe(bool setTo)
@@ -123,10 +149,23 @@ void Decompiler::ParseMLathe(CmdList& line)
 		SimplePrint(line, "SpindleStop");
 		break;
 	case 8:
-		// TODO
+		TAB;
+		line.pop_front();
+		if (usingBaseCode)
+			fileWrite << "M08(";
+		else
+			fileWrite << "SetCoolant(true";
+		if (line.size() > 0 && line.front().first == 'P')
+		{
+			if (!usingBaseCode)
+				fileWrite << ", ";
+			fileWrite << line.front().second;
+			line.pop_front();
+		}
+		fileWrite << ");" << std::endl;
 		break;
 	case 9:
-		//TODO
+		TogglePrint(line, "SetCoolant", false);
 		break;
 	case 10:
 		TogglePrint(line, "SetChuckClamp", true);
@@ -262,12 +301,33 @@ void Decompiler::ParseMLathe(CmdList& line)
 	case 115:
 		TogglePrint(line, "SetSecondarySpindleBrake", false);
 		break;
+	default:
+		std::cout << "Unrecognized M Code: " << line.front().first << line.front().second << std::endl;
+		TAB;
+		fileWrite << "Write";
+		if (line.size() == 1)
+			fileWrite << "Line";
+		fileWrite << "(\"" << line.front().first << line.front().second << "\");" << std::endl;
+		line.pop_front();
+		break;
 	}
 }
 	
 void Decompiler::ParseGLathe(CmdList& line)
 {
-
+	unsigned codeNum = static_cast<unsigned>(line.front().second);
+	switch (codeNum)
+	{
+	default:
+		std::cout << "Unrecognized G Code: " << line.front().first << line.front().second << std::endl;
+		TAB;
+		fileWrite << "Write";
+		if (line.size() == 1)
+			fileWrite << "Line";
+		fileWrite << "(\"" << line.front().first << line.front().second << "\");" << std::endl;
+		line.pop_front();
+		break;
+	}
 }
 	
 void Decompiler::NumBlock(CmdList& line)
@@ -387,7 +447,10 @@ void Decompiler::TogglePrint(CmdList& line, const std::string& fnName, const boo
 	
 	std::string boolStr = (setTo) ? "true" : "false";
 	
-	fileWrite << "(" << boolStr << ");" << std::endl;
+	fileWrite << "(";
+	if (!usingBaseCode)
+		fileWrite << boolStr;
+	fileWrite << ");" << std::endl;
 }
 
 void Decompiler::Comment(std::string line)

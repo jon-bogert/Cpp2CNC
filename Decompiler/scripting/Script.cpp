@@ -37,10 +37,12 @@ void Script::Main(int argc, char* argv[])
 {
     Comment("This is a program about that does something");
     SetSpindleBreak(false);
+    SetCoolant(true, 10.05);
     EndSubprogram();
     BR;
 
     SetProbeArm(true);
+    SetCoolant(false);
     EndAndReset();
     return 0;
 }

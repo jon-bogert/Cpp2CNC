@@ -1,2 +1,9 @@
-﻿  Script.cpp
-  Cpp2CNC.vcxproj -> D:\repos\C++\Cpp2CNC\x64\Debug\Cpp2CNC.exe
+﻿  Pch.cpp
+  Script.cpp
+  Compiler.cpp
+  Lathe.cpp
+  LatheCore.cpp
+  Main.cpp
+  Standard.cpp
+  Generating Code...
+  Cpp2CNC.vcxproj -> C:\Users\lcv2142940\Desktop\Cpp2CNC\x64\Debug\Cpp2CNC.exe

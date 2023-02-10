@@ -39,7 +39,7 @@ int Script::Main(int argc, char* argv[])
 	RapidAbsolute(10, -5);
 	LinearFeedRelative(.02, NONE);
 	LinearFeedRelative(NONE, -0.0005);
-
+	EndSubprogram();
 	BR;
 
 	SSVCustomStart(NONE, 1.3);
