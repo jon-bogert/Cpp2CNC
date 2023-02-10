@@ -176,10 +176,12 @@ namespace lathe
 	void CutThreadAbsolute(Num x, Num z, Num feedRate);														// G32 - All Parameters
 	void CutThreadRelative(Num u, Num w, Num feedRate);														// G32 - All Parameters
 
-	void TNCCancel();																						// G40;
-	void TNCLeft();																							// G41;
-	void TNCRight();																						// G42;
-	void ToolLengthComp();																					// G43;
+	void TNCCancel();																						// G40
+	void TNCLeft();																							// G41
+	void TNCRight();																						// G42
+	void ToolLengthComp();																					// G43
+
+	void SpindleSpeedLimit(unsigned rpm);																	// G50
 
 
 

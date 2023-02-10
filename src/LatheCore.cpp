@@ -961,3 +961,8 @@ void lathe::G43()
 {
 	Compiler::Print("G43\n");
 }
+
+void lathe::G50(unsigned rpm)
+{
+	std::string line = "G50 S" + std::to_string(rpm) + "\n";
+}

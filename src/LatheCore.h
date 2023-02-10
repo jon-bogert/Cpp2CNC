@@ -151,4 +151,5 @@ namespace lathe
 	void G41();
 	void G42();
 	void G43();
+	void G50(unsigned rpm);
 }

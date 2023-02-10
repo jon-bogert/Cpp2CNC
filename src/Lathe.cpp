@@ -660,3 +660,8 @@ void lathe::ToolLengthComp()
 {
 	G43();
 }
+
+void lathe::SpindleSpeedLimit(unsigned rpm)
+{
+	G50(rpm);
+}
