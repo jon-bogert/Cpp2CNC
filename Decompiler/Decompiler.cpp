@@ -33,11 +33,14 @@ void Decompiler::Run(std::string programName)
 	
 	std::string lineStr;
 	CmdList line;
+
+	Get().PrintHeader(programName);
 	
 	while(std::getline(Get().fileRead, lineStr))
 	{
 		if(lineStr == "")
 		{
+			Get().TAB;
 			Get().fileWrite << "BR;" << std::endl << std::endl;
 			continue;
 		}
@@ -62,7 +65,7 @@ void Decompiler::Run(std::string programName)
 			}
 		}
 	}
-
+	Get().PrintFooter();
 }
 
 void Decompiler::SetUsingLathe(bool setTo)
@@ -78,6 +81,9 @@ void Decompiler::LineToList(const std::string& line, CmdList& list)
 {
 	if(!list.empty())
 		assert("list not empty");
+
+	if (line == "")
+		return;
 	
 	std::stringstream stream;
 	stream << line;
@@ -87,7 +93,7 @@ void Decompiler::LineToList(const std::string& line, CmdList& list)
 	{
 		Cmd cmd;
 		cmd.first = cmdStr.front();
-		cmdStr.erase(cmdStr.front());
+		cmdStr.erase(cmdStr.begin());
 		cmd.second = std::stod(cmdStr);
 		list.push_back(cmd);
 	}
@@ -304,6 +310,54 @@ void Decompiler::Tool(CmdList& line)
 	fileWrite << ");" << std::endl;
 }
 
+void Decompiler::PrintHeader(std::string programName)
+{
+	fileWrite <<
+		R"(#include "Pch.h"
+#include "Script.h"
+#include "Standard.h"
+
+// "USE_CORE" Reveals Raw Codes
+#define USE_CORE
+
+// Use only one "USE_LATHE" or "USE_MILL"
+#define USE_LATHE
+//#define USE_MILL
+
+#ifdef USE_LATHE
+#include "Lathe.h"
+using namespace lathe;
+#ifdef USE_CORE
+#include "LatheCore.h"
+#endif
+#endif
+
+#ifdef USE_MILL
+#include "Mill.h"
+using namespace mill;
+#ifdef USE_CORE
+#include "MillCore.h"
+#endif
+#endif
+
+using namespace std;
+
+Script::Script()
+{
+	fileName = ")" << programName << R"(";
+	exportPath = "output/";
+}
+
+void Script::Main(int argc, char* argv[])
+{
+)";
+}
+
+void Decompiler::PrintFooter()
+{
+	fileWrite << "    return 0;\n}" << std::endl;
+}
+
 void Decompiler::SimplePrint(CmdList& line, const std::string& fnName)
 {
 	Cmd cmd = line.front();
@@ -338,6 +392,7 @@ void Decompiler::TogglePrint(CmdList& line, const std::string& fnName, const boo
 
 void Decompiler::Comment(std::string line)
 {
+	TAB;
 	while(line.back() != ')')
 		line.pop_back();
 	

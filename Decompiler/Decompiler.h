@@ -26,7 +26,9 @@ private:
 	void ParseGLathe(CmdList& line);
 	void NumBlock(CmdList& line);
 	void Tool(CmdList& line);
-	
+
+	void PrintHeader(std::string programName);
+	void PrintFooter();
 	void SimplePrint(CmdList& line, const std::string& fnName);
 	void TogglePrint(CmdList& line, const std::string& fnName, const bool& setTo);
 	void Comment(std::string line);

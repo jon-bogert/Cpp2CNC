@@ -29,20 +29,18 @@ using namespace std;
 
 Script::Script()
 {
-	fileName = "O12345";
+	fileName = "O11480";
 	exportPath = "output/";
 }
 
-int Script::Main(int argc, char* argv[])
+void Script::Main(int argc, char* argv[])
 {
-	Comment("<Enter Program Description Here>");
-	RapidAbsolute(10, -5);
-	LinearFeedRelative(.02, NONE);
-	LinearFeedRelative(NONE, -0.0005);
+    Comment("This is a program about that does something");
+    SetSpindleBreak(false);
+    EndSubprogram();
+    BR;
 
-	BR;
-
-	SSVCustomStart(NONE, 1.3);
-	EndAndReset();
-	return 0;
+    SetProbeArm(true);
+    EndAndReset();
+    return 0;
 }

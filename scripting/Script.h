@@ -8,5 +8,5 @@ public:
 
 	Script();
 
-	void Main(int argc, char* argv[]);
+	int Main(int argc, char* argv[]);
 };
